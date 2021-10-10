@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonCRUD.API", "PokemonCRUD.API\PokemonCRUD.API.csproj", "{9FBD319E-E904-453E-9F11-17B0A088A349}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonCRUD.API", "PokemonCRUD.API\PokemonCRUD.API.csproj", "{9FBD319E-E904-453E-9F11-17B0A088A349}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonCRUD.Services", "PokemonCRUD.Services\PokemonCRUD.Services.csproj", "{ED8996BF-312C-42B9-A312-D0F0E5D19E98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonCRUD.Services", "PokemonCRUD.Services\PokemonCRUD.Services.csproj", "{ED8996BF-312C-42B9-A312-D0F0E5D19E98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonCRUD.Core", "PokemonCRUD.Core\PokemonCRUD.Core.csproj", "{C8530F3A-AF75-4605-9D11-3D8C7BEE150D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonCRUD.Core", "PokemonCRUD.Core\PokemonCRUD.Core.csproj", "{C8530F3A-AF75-4605-9D11-3D8C7BEE150D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonCRUD.Repository", "PokemonCRUD.Repository\PokemonCRUD.Repository.csproj", "{49632E32-86A3-4F76-9CA3-FFE87E6293D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonCRUD.Repository", "PokemonCRUD.Repository\PokemonCRUD.Repository.csproj", "{49632E32-86A3-4F76-9CA3-FFE87E6293D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3E387DA2-23B4-4C50-9CCE-2ABF20ECA190}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemoCRUD.Tests.Services", "PokemoCRUD.Tests.Services\PokemoCRUD.Tests.Services.csproj", "{F1A4B8DC-DB25-4978-8790-F69A5F313155}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokemonCRUD.Services.UnitTest", "PokemonCRUD.Services.UnitTest\PokemonCRUD.Services.UnitTest.csproj", "{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,16 +37,16 @@ Global
 		{49632E32-86A3-4F76-9CA3-FFE87E6293D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49632E32-86A3-4F76-9CA3-FFE87E6293D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49632E32-86A3-4F76-9CA3-FFE87E6293D9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A4B8DC-DB25-4978-8790-F69A5F313155}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A4B8DC-DB25-4978-8790-F69A5F313155}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A4B8DC-DB25-4978-8790-F69A5F313155}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A4B8DC-DB25-4978-8790-F69A5F313155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{F1A4B8DC-DB25-4978-8790-F69A5F313155} = {3E387DA2-23B4-4C50-9CCE-2ABF20ECA190}
+		{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A} = {3E387DA2-23B4-4C50-9CCE-2ABF20ECA190}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E07A7F70-275C-4FC1-B554-9E67A2A67C56}

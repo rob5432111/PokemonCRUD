@@ -15,14 +15,16 @@ using FluentValidation.AspNetCore;
 using PokemonCRUD.Core.Validators;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.IO.Abstractions;
+using PokemonCRUD.Core.Common;
 
 namespace PokemonCRUD.API
 {
     public class Startup
     {
-        private const string SecretKey = "thisIsASecureKeyOfAtLeast12Characters";
+
         public static readonly SymmetricSecurityKey SigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SecretKey));
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -51,7 +53,7 @@ namespace PokemonCRUD.API
             {
                 jwtOptions.TokenValidationParameters = new TokenValidationParameters
                 {
-                    IssuerSigningKeys = new[] { SigningKey } ,
+                    IssuerSigningKeys = new[] { SigningKey },
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidIssuer = "http://localhost:58933",
@@ -79,16 +81,19 @@ namespace PokemonCRUD.API
                     }
                 });
             });
+
             services.AddMvc()
                 .AddFluentValidation();
 
             //Scoped services
             services.AddScoped<IPokemonRepository, PokemonRepository>();
+            services.AddScoped<IFileSystem, FileSystem>();
 
             //Transient services
             services.AddTransient<IPokemonService, PokemonService>();
             services.AddTransient<IConfigurationService, ConfigurationService>();
             services.AddTransient<IValidator<Pokemon>, PokemonValidator>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

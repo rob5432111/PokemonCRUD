@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PokemonCRUD.Core.Common;
 using PokemonCRUD.Core.Helper;
 using PokemonCRUD.Core.Interfaces;
 using PokemonCRUD.Core.Models;
@@ -41,17 +42,17 @@ namespace PokemonCRUD.API.Controllers
                 //Call to the configuration service to set the path
                 var result = _configurationService.ConfigureCsvPath(csvPath);
 
-                if (result.Equals("Ok"))
+                if (result.Equals(ResultMessage.Ok))
                 {
-                    return StatusCode(StatusCodes.Status200OK, "CSV File Path Configured correctly");
+                    return StatusCode(StatusCodes.Status200OK, CustomMessage.OkCsvPath);
                 }
-                else if (result.Equals("NotExists"))
+                else if (result.Equals(ResultMessage.NotFound))
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, "The file specified doesn't exists");
+                    return StatusCode(StatusCodes.Status404NotFound, CustomMessage.NotExistsFile);
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Error when configuring the file path");
+                    return StatusCode(StatusCodes.Status500InternalServerError, CustomMessage.ErrorFilePath);
                 }
             }
             catch (Exception ex)

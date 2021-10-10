@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PokemonCRUD.Core.Common;
 using PokemonCRUD.Core.Interfaces;
 using PokemonCRUD.Core.Models;
 using System;
@@ -50,6 +51,11 @@ namespace PokemonCRUD.API.Controllers
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         /// <summary>
@@ -72,6 +78,11 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -102,6 +113,11 @@ namespace PokemonCRUD.API.Controllers
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         /// <summary>
@@ -121,10 +137,10 @@ namespace PokemonCRUD.API.Controllers
 
                 return result switch
                 {
-                    "Updated" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} updated"),
-                    "Exists" => StatusCode(StatusCodes.Status204NoContent, $"Pokemon {pokemonName} already exists"),
-                    "NotFound" => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
-                    "Empty" => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
+                    ResultMessage.Updated => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} updated"),
+                    ResultMessage.Exists => StatusCode(StatusCodes.Status208AlreadyReported, $"Pokemon {pokemonName} already exists"),
+                    ResultMessage.NotFound => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
+                    ResultMessage.Empty => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
                     _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error updating the Pokemon"),
                 };
             }
@@ -132,6 +148,11 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -151,9 +172,9 @@ namespace PokemonCRUD.API.Controllers
 
                 return result switch
                 {
-                    "Deleted" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} deleted"),
-                    "NotFound" => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
-                    "Empty" => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
+                    ResultMessage.Deleted => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} deleted"),
+                    ResultMessage.NotFound => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
+                    ResultMessage.Empty => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
                     _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error deleting the Pokemon"),
                 };
             }
@@ -161,6 +182,11 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -187,6 +213,11 @@ namespace PokemonCRUD.API.Controllers
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
 
@@ -210,6 +241,11 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -239,6 +275,11 @@ namespace PokemonCRUD.API.Controllers
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
 
@@ -259,10 +300,10 @@ namespace PokemonCRUD.API.Controllers
 
                 return result switch
                 {
-                    "Updated" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} updated"),
-                    "Exists" => StatusCode(StatusCodes.Status204NoContent, $"Pokemon {pokemonName} already exists"),
-                    "NotFound" => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
-                    "Empty" => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
+                    ResultMessage.Updated => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} updated"),
+                    ResultMessage.Exists => StatusCode(StatusCodes.Status208AlreadyReported, $"Pokemon {pokemonName} already exists"),
+                    ResultMessage.NotFound => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
+                    ResultMessage.Empty => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
                     _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error updating the Pokemon"),
                 };
             }
@@ -270,6 +311,11 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -290,9 +336,9 @@ namespace PokemonCRUD.API.Controllers
 
                 return result switch
                 {
-                    "Deleted" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} deleted"),
-                    "NotFound" => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
-                    "Empty" => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
+                    ResultMessage.Deleted => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} deleted"),
+                    ResultMessage.NotFound => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
+                    ResultMessage.Empty => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
                     _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error deleting the Pokemon"),
                 };
             }
@@ -300,6 +346,11 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogError("{@exception}", ex);
                 return StatusCode(StatusCodes.Status404NotFound, "The CSV file was not found");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 

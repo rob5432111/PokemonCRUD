@@ -7,10 +7,9 @@ namespace PokemonCRUD.Core.Interfaces
     {
         Pokemon GetByName(string name);
         List<Pokemon> GetAllPaginated(int startingRow, int numberRowsPerPage);
-        string AddNew(Pokemon pokemon);
+        Pokemon AddNew(Pokemon pokemon);
         long CountLinesInFile();
         string Modify(string orginalName, Pokemon pokemon);
-
         string Delete(string orginalName);
     }
 }

@@ -1,10 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PokemonCRUD.Core.Common;
 using PokemonCRUD.Core.Interfaces;
 using PokemonCRUD.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 
 namespace PokemonCRUD.Services
 {
@@ -12,16 +15,16 @@ namespace PokemonCRUD.Services
     {
         #region Constructor & Properties
         private readonly IPokemonRepository _pokemonRepository;
-        private readonly AppSettings _appSettings;
-        private readonly string _csvPath;
+        private readonly AppSettings _appSettings;        
+        readonly IFileSystem _fileSystem;
 
         private readonly ILogger<PokemonService> _logger;
         public PokemonService(IOptions<AppSettings> options, IPokemonRepository pokemonRepository
-            , ILogger<PokemonService> logger)
+            , ILogger<PokemonService> logger, IFileSystem fileSystem)
         {
             _appSettings = options.Value;
-            _pokemonRepository = pokemonRepository;
-            _csvPath = _appSettings.ApplicationConfiguration.CsvPath;
+            _pokemonRepository = pokemonRepository;            
+            _fileSystem = fileSystem;
             _logger = logger;
         }
         #endregion
@@ -62,14 +65,37 @@ namespace PokemonCRUD.Services
 
         public string AddPokemon(Pokemon newPokemon)
         {
-            CheckFileExists();            
-            var result = _pokemonRepository.AddNew(newPokemon);
-            return result;
+            CheckFileExists();
+
+            //Verify if the Name of the Pokemon is available 
+            var pokemon = _pokemonRepository.GetByName(newPokemon.Name);
+            if (pokemon != null)
+            {
+                return ResultMessage.Exists;
+            }
+
+            var addedPokemon = _pokemonRepository.AddNew(newPokemon);
+            if (addedPokemon != null)
+            {
+                return ResultMessage.Ok;
+            }
+            return ResultMessage.Error;
         }
 
         public string ModifyPokemon(string orignalName, Pokemon newPokemon)
         {
             CheckFileExists();
+
+            //If the name has changed first verify the name is available
+            if (orignalName.ToLower() != newPokemon.Name.ToLower())
+            {
+                var pokemon = _pokemonRepository.GetByName(newPokemon.Name);
+                if (pokemon != null)
+                {
+                    return ResultMessage.Exists;
+                }
+            }
+
             var result = _pokemonRepository.Modify(orignalName, newPokemon);
             return result;
         }
@@ -86,10 +112,12 @@ namespace PokemonCRUD.Services
         #region Private Methods
         private void CheckFileExists()
         {
-            if (!File.Exists(_csvPath))
+            if (_fileSystem.File.Exists(_appSettings.ApplicationConfiguration.CsvPath))
             {
-                throw new FileNotFoundException();
+                return;
             }
+
+            throw new FileNotFoundException();
         }
         #endregion
     }

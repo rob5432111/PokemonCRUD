@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using PokemonCRUD.Core.Common;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -7,9 +8,9 @@ namespace PokemonCRUD.Core.Helper
 {
     public class JwtHelper
     {
-        private const string SecretKey = "thisIsASecureKeyOfAtLeast12Characters";
+      
         public static readonly SymmetricSecurityKey SigningKey =
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Constants.SecretKey));
 
         public static string GenerateJwtToken()
         {

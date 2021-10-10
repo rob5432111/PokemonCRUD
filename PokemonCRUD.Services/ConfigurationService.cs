@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PokemonCRUD.Core.Models;
+using PokemonCRUD.Core.Common;
 
 namespace PokemonCRUD.Services
 {
@@ -22,13 +23,13 @@ namespace PokemonCRUD.Services
             if (!fileExists)
             {
                 _logger.LogInformation("The file specified doesn't exists {File.Exists} {csvPath}", fileExists, csvPath);
-                return "NotExists";
+                return ResultMessage.NotFound;
             }
 
             _appSettings.ApplicationConfiguration.CsvPath = csvPath;
 
             _logger.LogInformation("Csv File Path configured correctly to: {csvPath}", csvPath);
-            return "Ok";            
+            return ResultMessage.Ok;            
         }
     }
 }
