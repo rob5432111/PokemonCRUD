@@ -6,8 +6,9 @@ namespace PokemonCRUD.Core.Interfaces
     public interface IPokemonService
     {
         Pokemon GetPokemonByName(string name);
-
         List<Pokemon> GetPokemonPaginated(int startingRow, int numberRowsPerPage);
-        Pokemon AddPokemon(Pokemon newPokemon);
+        string AddPokemon(Pokemon newPokemon);
+        string ModifyPokemon(string originalName, Pokemon newPokemon);
+        string DeletePokemon(string originalName);
     }
 }

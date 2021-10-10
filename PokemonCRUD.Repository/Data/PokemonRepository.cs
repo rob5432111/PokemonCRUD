@@ -4,9 +4,11 @@ using PokemonCRUD.Core.Interfaces;
 using PokemonCRUD.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace PokemonCRUD.Repository.Data
 {
@@ -18,7 +20,7 @@ namespace PokemonCRUD.Repository.Data
         private readonly string _csvPath;
 
         public PokemonRepository(IOptions<AppSettings> options, ILogger<PokemonRepository> logger)
-        {            
+        {
             _appSettings = options.Value;
             _logger = logger;
             _csvPath = _appSettings.ApplicationConfiguration.CsvPath;
@@ -36,7 +38,7 @@ namespace PokemonCRUD.Repository.Data
         }
 
         public Pokemon GetByName(string name)
-        {          
+        {
             try
             {
                 var pokemon = File.ReadLines(_csvPath)
@@ -50,28 +52,27 @@ namespace PokemonCRUD.Repository.Data
             catch (Exception ex)
             {
                 _logger.LogError("{@exception}", ex);
-                return null;
-            }           
+                throw;
+            }
         }
 
         public List<Pokemon> GetAllPaginated(int startingRow, int numberRowsPerPage)
-        {           
-
+        {
             try
             {
                 var pokemons = File.ReadLines(_csvPath)
-                    .Skip(startingRow)                    
+                    .Skip(startingRow)
                     .Select(ParsePokemonFromLine)
                     .Take(numberRowsPerPage)
                     .ToList();
-                    
+
                 return pokemons;
 
             }
             catch (Exception ex)
             {
                 _logger.LogError("{@exception}", ex);
-                return null;
+                throw;
             }
 
         }
@@ -80,19 +81,57 @@ namespace PokemonCRUD.Repository.Data
         {
             try
             {
+                if (VerifyIfPokemonExists(pokemon.Name))
+                {
+                    return "Exists";
+                }
+
                 var csv = new StringBuilder();
                 csv.Append(FormatPokemonToCsv(pokemon));
-                File.WriteAllText(_csvPath, csv.ToString());
+                File.AppendAllText(_csvPath, csv.ToString());
                 return "Ok";
             }
             catch (Exception ex)
             {
                 _logger.LogError("{@exception}", ex);
-                return ex.Message;
+                throw;
             }
         }
 
+        public string Modify(string originalName, Pokemon pokemon)
+        {
+            try
+            {
+                return UpdateDeletePokemon(originalName, pokemon, false); 
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                throw;
+            }
+        }
+
+        public string Delete(string name)
+        {
+            try
+            {               
+                return  UpdateDeletePokemon(name, null, true);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@exception}", ex);
+                throw;
+            }
+        }
         #region Private Methods
+        private bool VerifyIfPokemonExists(string name)
+        {
+            return File.ReadLines(_csvPath)
+                   .Skip(1) //Skip the first line that contains the headers
+                   .Select(ParsePokemonFromLine)
+                   .Where(p => p.Name == name)
+                   .Any();
+        }
         private static Pokemon ParsePokemonFromLine(string line)
         {
             string[] parts = line.Split(',');
@@ -116,7 +155,7 @@ namespace PokemonCRUD.Repository.Data
 
         private static string FormatPokemonToCsv(Pokemon pokemon)
         {
-            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}"
+            return string.Format("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}{13}"
                 , pokemon.Number //0
                 , pokemon.Name //1
                 , pokemon.Type1 //2
@@ -131,6 +170,67 @@ namespace PokemonCRUD.Repository.Data
                 , pokemon.Generation //11
                 , pokemon.Legendary //12
                 , Environment.NewLine);
+        }
+
+        private string UpdateDeletePokemon(string pokemonOriginalName, Pokemon pokemon, bool deleteRecord)
+        {
+            var delimiter = ",";
+            var tempPath = Path.GetTempFileName();
+            string result = "NotFound";
+            using (var writer = new StreamWriter(tempPath))
+            using (var reader = new StreamReader(_csvPath))
+            {
+                //Read the Header and Write it
+                string line = reader.ReadLine();
+                if (string.IsNullOrEmpty(line))
+                {
+                    return "Empty"; // File is empty
+                }
+
+                writer.WriteLine(line);
+
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var columns = line.Split(',').Where(s => s != delimiter).ToArray();
+
+                    //Column[1] is the name and the unique identifier
+                    if (columns[1].Equals(pokemonOriginalName))
+                    {
+                        if (deleteRecord)
+                        {
+                            result = "Deleted";
+                            continue;
+                        }
+
+                        if (pokemonOriginalName.Equals(pokemon.Name))
+                        {
+                            //If the NewName is the same as the original update the record
+                            writer.Write(FormatPokemonToCsv(pokemon));
+                            result = "Updated";
+                        }
+                        else if (VerifyIfPokemonExists(pokemon.Name))
+                        {
+                            //If the NewName is different but it already exists maintaint the original record
+                            writer.WriteLine(line);
+                            result = "Exists";
+                        }
+                        else 
+                        {
+                            //If the name is different than the original but doesn't belongs to another Pokemon update it
+                            writer.Write(FormatPokemonToCsv(pokemon));
+                            result = "Updated";
+                        }
+                                                
+                        continue;
+                    }
+
+                    writer.WriteLine(string.Join(delimiter, columns));
+                }
+            }
+
+            File.Delete(_csvPath);
+            File.Move(tempPath, _csvPath);
+            return result;
         }
         #endregion
     }

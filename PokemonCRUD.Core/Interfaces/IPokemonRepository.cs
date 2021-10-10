@@ -9,5 +9,8 @@ namespace PokemonCRUD.Core.Interfaces
         List<Pokemon> GetAllPaginated(int startingRow, int numberRowsPerPage);
         string AddNew(Pokemon pokemon);
         long CountLinesInFile();
+        string Modify(string orginalName, Pokemon pokemon);
+
+        string Delete(string orginalName);
     }
 }
