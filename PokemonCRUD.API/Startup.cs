@@ -92,7 +92,7 @@ namespace PokemonCRUD.API
             //Transient services
             services.AddTransient<IPokemonService, PokemonService>();
             services.AddTransient<IConfigurationService, ConfigurationService>();
-            services.AddTransient<IValidator<Pokemon>, PokemonValidator>();
+            services.AddTransient<IValidator<Pokemon>, PokemonValidator>();           
 
         }
 

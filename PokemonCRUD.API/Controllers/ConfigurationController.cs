@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace PokemonCRUD.API.Controllers
@@ -37,7 +38,7 @@ namespace PokemonCRUD.API.Controllers
         {
             try
             {
-                _logger.LogInformation("Starting the FilePath Configuration process: {csvPath}", csvPath);
+                _logger.LogInformation("Starting the FilePath Configuration process: {csvPath}", csvPath);           
 
                 //Call to the configuration service to set the path
                 var result = _configurationService.ConfigureCsvPath(csvPath);
