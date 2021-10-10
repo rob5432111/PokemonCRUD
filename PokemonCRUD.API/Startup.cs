@@ -13,17 +13,22 @@ using Serilog;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using PokemonCRUD.Core.Validators;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace PokemonCRUD.API
 {
     public class Startup
     {
+        private const string SecretKey = "thisIsASecureKeyOfAtLeast12Characters";
+        public static readonly SymmetricSecurityKey SigningKey =
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }       
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -37,10 +42,28 @@ namespace PokemonCRUD.API
 
             services.AddControllers();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "JwtBearer";
+                options.DefaultChallengeScheme = "JwtBearer";
+            })
+            .AddJwtBearer("JwtBearer", jwtOptions =>
+            {
+                jwtOptions.TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKeys = new[] { SigningKey } ,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidIssuer = "http://localhost:58933",
+                    ValidAudience = "http://localhost:58933",
+                    ValidateLifetime = true
+                };
+            });
+
             //Add logging
             services.AddLogging(loggingBuilder =>
                 loggingBuilder.AddSerilog(dispose: true));
-         
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -84,6 +107,7 @@ namespace PokemonCRUD.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

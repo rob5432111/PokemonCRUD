@@ -40,7 +40,7 @@ namespace PokemonCRUD.Repository.Data
                 var pokemon = File.ReadLines(_csvPath)
                     .Skip(1) //Skip the first line that contains the headers
                     .Select(ParsePokemonFromLine)
-                    .Where(p => p.Name == name)
+                    .Where(p => p.Name.ToLower() == name.ToLower())
                     .FirstOrDefault();
                 return pokemon;
 
@@ -125,7 +125,7 @@ namespace PokemonCRUD.Repository.Data
             return File.ReadLines(_csvPath)
                    .Skip(1) //Skip the first line that contains the headers
                    .Select(ParsePokemonFromLine)
-                   .Where(p => p.Name == name)
+                   .Where(p => p.Name.ToLower() == name.ToLower())
                    .Any();
         }
         private static Pokemon ParsePokemonFromLine(string line)
@@ -198,7 +198,7 @@ namespace PokemonCRUD.Repository.Data
                             continue;
                         }
 
-                        if (pokemonOriginalName.Equals(pokemon.Name))
+                        if (pokemonOriginalName.ToLower().Equals(pokemon.Name.ToLower()))
                         {
                             //If the NewName is the same as the original update the record
                             writer.Write(FormatPokemonToCsv(pokemon));

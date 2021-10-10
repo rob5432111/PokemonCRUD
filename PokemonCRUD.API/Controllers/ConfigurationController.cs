@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using PokemonCRUD.Core.Helper;
 using PokemonCRUD.Core.Interfaces;
 using PokemonCRUD.Core.Models;
 using System;
@@ -29,7 +31,7 @@ namespace PokemonCRUD.API.Controllers
             _logger = logger;
         }
 
-        [HttpPut("FilePath")]
+        [HttpPut("FilePath")]       
         public IActionResult FilePathConfiguration([Required] string csvPath)
         {
             try
@@ -51,6 +53,20 @@ namespace PokemonCRUD.API.Controllers
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError, "Error when configuring the file path");
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{@ex}", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("token")]
+        public IActionResult GenerateJwtToken()
+        {
+            try
+            {
+                return new ObjectResult(JwtHelper.GenerateJwtToken());
             }
             catch (Exception ex)
             {
