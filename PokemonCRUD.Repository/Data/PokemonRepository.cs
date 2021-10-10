@@ -25,11 +25,7 @@ namespace PokemonCRUD.Repository.Data
             _logger = logger;
             _csvPath = _appSettings.ApplicationConfiguration.CsvPath;
         }
-
-        /// <summary>
-        /// Returns the number of lines in the Pokemon CSV
-        /// </summary>        
-        /// <returns>The number of lines in the CSV</returns>
+       
         public long CountLinesInFile()
         {
             return File.ReadLines(_csvPath)

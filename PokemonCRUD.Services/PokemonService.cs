@@ -5,7 +5,6 @@ using PokemonCRUD.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace PokemonCRUD.Services
 {
@@ -59,7 +58,6 @@ namespace PokemonCRUD.Services
 
             var pokemons = _pokemonRepository.GetAllPaginated(startingRow, numberRowsPerPage);
             return pokemons;
-
         }
 
         public string AddPokemon(Pokemon newPokemon)
@@ -82,7 +80,6 @@ namespace PokemonCRUD.Services
             var result = _pokemonRepository.Delete(orignalName);
             return result;
         }
-
 
         #endregion
 

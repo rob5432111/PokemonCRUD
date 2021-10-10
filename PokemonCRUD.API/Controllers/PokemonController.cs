@@ -79,16 +79,13 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogInformation("Starting the creation of a new {Pokemon}", pokemon);
                 var result = _pokemonService.AddPokemon(pokemon);
-                if (result.Equals("Ok"))
-                {
-                    return StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemon.Name} created");
-                }
-                else if (result.Equals("Exists"))
-                {
-                    return StatusCode(StatusCodes.Status204NoContent, $"Pokemon {pokemon.Name} already exists");
-                }
 
-                return StatusCode(StatusCodes.Status204NoContent, $"Error creating the new Pokemon");
+                return result switch
+                {
+                    "Ok" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemon.Name} created"),
+                    "Exists" => StatusCode(StatusCodes.Status204NoContent, $"Pokemon {pokemon.Name} already exists"),
+                    _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error creating the {pokemon}")
+                };               
             }
             catch (FileNotFoundException ex)
             {
@@ -97,32 +94,28 @@ namespace PokemonCRUD.API.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Modifies a Pokemon based on the originalName
+        /// </summary>
+        /// <param name="pokemonName"></param>
+        /// <param name="pokemon"></param>
+        /// <returns>Ok(200) if updated correctly</returns>
         [HttpPut("/modify/{pokemonName}")]
         public ActionResult<Pokemon> UpdatePokemon(string pokemonName, [FromBody] Pokemon pokemon)
         {
             try
             {
-                _logger.LogInformation("Starting the creation of a new {Pokemon}", pokemon);
+                _logger.LogInformation("Starting the modification of {PokemonName}", pokemonName);
                 var result = _pokemonService.ModifyPokemon(pokemonName, pokemon);
-                if (result.Equals("Updated"))
-                {
-                    return StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} updated");
-                }
-                else if (result.Equals("Empty"))
-                {
-                    return StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty");
-                }
-                else if (result.Equals("Exists"))
-                {
-                    return StatusCode(StatusCodes.Status204NoContent, $"Pokemon {pokemonName} already exists");
-                }
-                else if (result.Equals("NotFound"))
-                {
-                    return StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found");
-                }
 
-                return StatusCode(StatusCodes.Status204NoContent, $"Error updating the Pokemon");
+                return result switch
+                {
+                    "Updated" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} updated"),
+                    "Exists" => StatusCode(StatusCodes.Status204NoContent, $"Pokemon {pokemonName} already exists"),
+                    "NotFound" => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
+                    "Empty" => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
+                    _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error updating the Pokemon"),
+                };
             }
             catch (FileNotFoundException ex)
             {
@@ -131,6 +124,11 @@ namespace PokemonCRUD.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a Pokemon based on the pokemonName
+        /// </summary>
+        /// <param name="pokemonName"></param>
+        /// <returns>Ok(200) if deleted correctly</returns>
         [HttpDelete("/delete/{pokemonName}")]
         public ActionResult<Pokemon> DeletePokemon(string pokemonName)
         {
@@ -138,21 +136,14 @@ namespace PokemonCRUD.API.Controllers
             {
                 _logger.LogInformation("Starting the creation of a new {Pokemon}", pokemonName);
                 var result = _pokemonService.DeletePokemon(pokemonName);
-                if (result.Equals("Deleted"))
-                {
-                    return StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} deleted");
-                }
-                else if (result.Equals("Empty"))
-                {
-                    return StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty");
-                }
-                else if (result.Equals("NotFound"))
-                {
-                    return StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found");
-                }
 
-
-                return StatusCode(StatusCodes.Status204NoContent, $"Error deleting the Pokemon");
+                return result switch
+                {
+                    "Deleted" => StatusCode(StatusCodes.Status200OK, $"Pokemon {pokemonName} deleted"),
+                    "NotFound" => StatusCode(StatusCodes.Status404NotFound, $"Pokemon {pokemonName} was not found"),
+                    "Empty" => StatusCode(StatusCodes.Status204NoContent, $"CSV File was empty"),
+                    _ => StatusCode(StatusCodes.Status500InternalServerError, $"Error deleting the Pokemon"),
+                };
             }
             catch (FileNotFoundException ex)
             {
