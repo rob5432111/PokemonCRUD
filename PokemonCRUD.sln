@@ -15,13 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3E387DA2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PokemonCRUD.Services.UnitTest", "PokemonCRUD.Services.UnitTest\PokemonCRUD.Services.UnitTest.csproj", "{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkingFolder", "WorkingFolder", "{687C6308-B76C-4754-AD1B-A08B4B3C8BC5}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\Desktop\pokemon.csv = ..\..\..\Desktop\pokemon.csv
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Logs", "Logs", "{F04BBABA-D81F-44F2-B5C7-409C4CC0243C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,7 +47,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C6139A8F-7B00-44E3-8DD7-2A2C3BF7D54A} = {3E387DA2-23B4-4C50-9CCE-2ABF20ECA190}
-		{F04BBABA-D81F-44F2-B5C7-409C4CC0243C} = {687C6308-B76C-4754-AD1B-A08B4B3C8BC5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E07A7F70-275C-4FC1-B554-9E67A2A67C56}
